@@ -19,7 +19,7 @@
 <!--Nav Area -->
     <nav class="navbar navbar-expand-md navbar-dark fixed-top"> <!--Expand all of the links for medium screens and above, and hamburger icon for screens less than medium breakpont. dark background, fixed to to top-->
         <div class="container-fluid">
-            <a class="navbar-brand" href="#"><img src="img/Dark logo.svg" alt="Matthew Snyder Mark" class="d-inline-block align-text-top" width="40" height="25"> APP NAME</a>
+            <a class="navbar-brand" href="#"><img src="img/Dark logo.svg" alt="Matthew Snyder Mark" class="custom-title d-inline-block align-text-top" width="40" height="25">Loan Shark</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -47,7 +47,72 @@
     </nav>
     <!--Main-->
     <main class="flex-shrink-0">
-        <div class="container"></div>
+        <div class="container">
+            <div class="row row-cols-1 row-cols-lg-2">
+                <div class="col">
+                    <h5 class="display-5">Loan Calculator</h5>
+                    <form class="row bg-secondary">
+                        <div class="col-12 pt-2">
+                            <label for="loanAmount" class="form-label">Loan Amount</label>
+                            <input type="number" class="form-control" id="loanAmount" aria-label="Loan Amount" placeholder ='0'>
+                        </div>
+                        <div class="col-12 pt-2">
+                            <label for="paymentAmount" class="form-label">Payments</label>
+                            <input type="number" class="form-control" id="paymentAmount" aria-Label="Payment Amount" placeholder = "0">
+                        </div>
+                        <div class="col-12 pt-2">
+                            <label for="interestRate" class="form-label">Rate</label>
+                            <input type="number" class="form-control" id="interestRate" aria-Label="Interest Rate" placeholder = "0">
+                        </div>
+                        <div class="col-12 pt-3 pb-3">
+                            <div class="holder d-flex">
+                                <button type="button" class="btn btn-md btn-secondary border-1 border-primary text-primary">Calculate</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col">
+                    <h5 class="text-center mt-5"><em>Your monthly payments</em></h5>
+                    <div class="paymentHolder mt-4">
+                        <div class="yourPayment text-center"><h2 class="display-5 bg-primary invisible"  id = 'youOwe'></h2></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <h5 class="text-start">Total Principal</h5>
+                        </div>
+                        <div class="col-6 ">
+                            <h5 class="text-start invisible" id="dollarAmountPrincipal">$15,000.00</h5>
+                        </div>
+                        <div class="col-6">
+                           <h5 class="text-start">Total Interest</h5>
+                        </div>
+                        <div class="col-6">
+                            <h5 class="text-start  invisible" id='dollarAmountInterest'>$1,171.82</h5>
+                        </div>
+                        <div class="col-6">
+                            <h5 class="text-start">Total Cost</h5>
+                        </div>
+                        <div class="col-6">
+                            <h5 class="text-start  invisible" ><strong>$16,171.82</strong></h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mt-2 bg-primary">
+                    <div class="holder table-responsive mt-2 mb-2">
+                        <table class="table table-striped table-border table-secondary">
+                            <thead>
+                                <th>Month</th>
+                                <th>Payment</th>
+                                <th>Principal</th>
+                                <th>Interest</th>
+                                <th>Total Interest</th>
+                                <th>Balance</th>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
     <!--Footer Section-->
     <footer class="footer mt-auto py-3">
