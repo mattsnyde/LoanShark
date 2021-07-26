@@ -49,23 +49,126 @@
     <!--main area-->
     <main class="flex-shrink-0">
         <div class="container py-5 px-4 mt-5">
-            <h2 class="border-1 border-bottom border-dark text-center custom-title">The Code for Loan Shark</h2>
+            <h2 class="border-1 border-bottom border-dark text-center custom-title text-danger">The Code for Loan Shark</h2>
             <div class="row row-cols-1 row-cols-lg-2">
                 <!--first column is code embed-->
                 <div class="col-lg-8">
                     <pre class="line-numbers"> <!--line-numbers will put an increasing number for each line there is.-->
                         <code class="language-javascript">
-                            function helloWorld(){  
-                                alert("hello world")
+                            function userInput(){
+                                let loanAmount = document.getElementById('loanAmount').value 
+                                let termMonths = document.getElementById('termMonths').value
+                                let interestRate = document.getElementById('interestRate').value 
+                            
+                                loanAmount = parseFloat(loanAmount)
+                                termMonths = parseInt(termMonths)
+                                interestRate = parseInt(interestRate)
+                            
+                                let acutalInterestRate = interestRate / 100 
+                            
+                                let data = calculate(loanAmount, termMonths, acutalInterestRate)
+                                let paidOff = payOff(data, loanAmount, termMonths, acutalInterestRate) 
+                            
+                                view(paidOff, data, loanAmount) 
+                            }
+                            
+                            function calculate(loanAmount, termMonths, acutalInterestRate){
+                                let info = [];
+                                let interestOnPayment = (loanAmount * (acutalInterestRate)) / 12 
+                                let monthlyPayments =  ((loanAmount) * (acutalInterestRate / 12))   / (1 - Math.pow(1 + (acutalInterestRate / 12), -termMonths))           
+                                let totalPayment = monthlyPayments * termMonths;  
+                                let totalInterest = totalPayment - loanAmount
+                                let principalOnPayment = monthlyPayments - interestOnPayment; 
+                                info.push(monthlyPayments, principalOnPayment, interestOnPayment, totalInterest, totalPayment) 
+                                return info;
+                            }
+                            
+                             function payOff(data, loanAmount, termMonths, actualInterestRate){
+                             
+                                let paidOff = []; 
+                            
+                                let monthlyPayments = data[0] 
+                                let principalOnPayment = data[1]
+                                let interestOnPayment = data[2]
+                                let totalPayment = data[4]
+                            
+                                let count = 0;
+                            
+                                while(totalPayment > 0){  
+                                    totalPayment = totalPayment - monthlyPayments  
+                                    interestOnPayment = totalPayment * (actualInterestRate / 12) 
+                                    principalOnPayment = monthlyPayments - interestOnPayment  
+                                    if(totalPayment + 1 < monthlyPayments){ 
+                                        principalOnPayment = monthlyPayments
+                                        totalPayment = 0;
+                                        interestOnPayment = 0;
+                                    }
+                                    count++;
+                                    paidOff.push(count, monthlyPayments, principalOnPayment, interestOnPayment, '-', totalPayment) 
+                                }
+                                return  paidOff;
+                            }
+                            
+                            function view(paidOff, data, loanAmount){
+                                let usd =  Intl.NumberFormat("en-US", {style:"currency", currency:"USD"}) 
+                            
+                                let dollarAmountPrincipalEl = document.getElementById('dollarAmountPrincipal')
+                                let dollarAmountInterestEl = document.getElementById('dollarAmountInterest')
+                                let totalDollarAmountEl = document.getElementById('totalDollarAmount')
+                                let youOweEl = document.getElementById('youOwe')
+                            
+                                let monthlyPayments = data[0]
+                                let totalPayment = data[4]
+                                let totalInterest = data[3]
+                            
+                                dollarAmountPrincipalEl.innerHTML = usd.format(loanAmount)
+                                dollarAmountInterestEl.innerHTML = usd.format(totalInterest)
+                                totalDollarAmountEl.innerHTML = usd.format(totalPayment) 
+                                youOweEl.innerHTML = usd.format(monthlyPayments)
+                            
+                                dollarAmountPrincipalEl.classList.remove('invisible')
+                                dollarAmountInterestEl.classList.remove('invisible')
+                                totalDollarAmountEl.classList.remove('invisible')
+                                youOweEl.classList.remove('invisible')
+                            
+                            
+                                let tableBody = document.getElementById('results') 
+                                let templateRow = document.getElementById('fbTemplate')
+                                tableBody.innerHTML='';  
+                            
+                                for(let i = 0; i < paidOff.length; i+=6){
+                                    let tableRow = document.importNode(templateRow.content, true)  
+                                    let rowCols = tableRow.querySelectorAll('td')
+                            
+                                     rowCols[0].textContent = (paidOff[i])
+                            
+                                     rowCols[1].textContent = usd.format(paidOff[i + 1]) 
+                            
+                                     rowCols[2].textContent = usd.format(paidOff[i + 2])  
+                            
+                                     rowCols[3].textContent = usd.format(paidOff[i + 3])  
+                            
+                                     rowCols[4].textContent = usd.format(paidOff[i + 5]) 
+                            
+                                    tableBody.appendChild(tableRow) 
+                                }
                             }
                         </code>
                     </pre>
                 </div>
                 <!--second column is description of the code-->
                 <div class="col-lg-4">
-                    <p>The code is structured in one function</p>
-                    <h5>Hello World</h5>
-                    <p>helloWorld is a function that displays an alert with a message of "Hello World"</p>
+                     <h5 class="text-danger border-bottom border-2 border-light mt-2 pb-1">userInput()</h5>
+                    <p class='text-light'>The userInput function gets user input and passes it as arguements to other functions used in of it.</p>
+                    <br>
+                    <h5 class="text-danger border-bottom border-2 border-light pb-1">calculate()</h5>
+                    <p class="text-light">The calculate function is used to calculate the information that I return to the user. Inside of this function I am finding, the interest on the payment, the monthly payment, the total payment, the total interest, and the principal on the payment. All of these calculations are pushed to an array which will be used in other functions.</p>
+                    <br>
+                    <h5 class="text-danger border-bottom border-2 border-light pb-1">payOff()</h5>
+                    <p class="text-light">The payOff function is used to represent the payments over time. The arguements taken into the function is the data array from the calculate function, loan amount, term months, and actual interest. The first few lines of the function are just assigning information from data array to variables. The while loop is used to display updated payment month, balance, interest, and principal. This is then pushed to an array called paidOff</p>
+                    <br>
+                    <h5 class="text-danger border-bottom border-2 border-light pb-1">view()</h5>
+                    <p class="text-light">The view function has 3 parameters which are the paidOff array from the payOff function and the data array which comes from the calculate function and then the interest rate. Inside of this function I assign some of the numbers I have calculated from other functions to html elements. I also make these html elements visibile because before the user hits the calculate button the html elements have a class of invisible. I then access the tableBody which comes from the table and the tableRow comes from the template. Using the paidOff array which holds all the calculated information, this array is used to populate rowCols which comes from the template. There are 5 rowCols and each one is assigned different information from the paidOff array. Each row holds, month, payment, principal on payment, interest on payment, and the updated balance.</p>
                 </div>
             </div>
         </div>
